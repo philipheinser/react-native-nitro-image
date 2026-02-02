@@ -210,5 +210,26 @@ namespace margelo::nitro::image {
       return __promise;
     }();
   }
+  std::shared_ptr<HybridImageSpec> JHybridImageFactorySpec::loadFromBlurHash(const std::string& blurhash, std::optional<double> width, std::optional<double> height, std::optional<double> punch) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JHybridImageSpec::javaobject>(jni::alias_ref<jni::JString> /* blurhash */, jni::alias_ref<jni::JDouble> /* width */, jni::alias_ref<jni::JDouble> /* height */, jni::alias_ref<jni::JDouble> /* punch */)>("loadFromBlurHash");
+    auto __result = method(_javaPart, jni::make_jstring(blurhash), width.has_value() ? jni::JDouble::valueOf(width.value()) : nullptr, height.has_value() ? jni::JDouble::valueOf(height.value()) : nullptr, punch.has_value() ? jni::JDouble::valueOf(punch.value()) : nullptr);
+    return __result->cthis()->shared_cast<JHybridImageSpec>();
+  }
+  std::shared_ptr<Promise<std::shared_ptr<HybridImageSpec>>> JHybridImageFactorySpec::loadFromBlurHashAsync(const std::string& blurhash, std::optional<double> width, std::optional<double> height, std::optional<double> punch) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JString> /* blurhash */, jni::alias_ref<jni::JDouble> /* width */, jni::alias_ref<jni::JDouble> /* height */, jni::alias_ref<jni::JDouble> /* punch */)>("loadFromBlurHashAsync");
+    auto __result = method(_javaPart, jni::make_jstring(blurhash), width.has_value() ? jni::JDouble::valueOf(width.value()) : nullptr, height.has_value() ? jni::JDouble::valueOf(height.value()) : nullptr, punch.has_value() ? jni::JDouble::valueOf(punch.value()) : nullptr);
+    return [&]() {
+      auto __promise = Promise<std::shared_ptr<HybridImageSpec>>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JHybridImageSpec::javaobject>(__boxedResult);
+        __promise->resolve(__result->cthis()->shared_cast<JHybridImageSpec>());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
 
 } // namespace margelo::nitro::image

@@ -16,15 +16,16 @@
 - Supports deferred `ImageLoader` types to optimize for displaying large lists of Images ⏳
 - Fast Web Image loading and caching using [SDWebImage](https://github.com/SDWebImage/SDWebImage) (iOS) and [Coil](https://github.com/coil-kt/coil) (Android) 🌎
 - [ThumbHash](https://github.com/evanw/thumbhash) support for elegant placeholders 🖼️
+- [BlurHash](https://github.com/woltapp/blurhash) support for compact placeholder strings 🎨
 
 ```tsx
 function App() {
   return (
     <NitroImage
-      image={{ filePath: '/tmp/image.jpg' }}
+      image={{ filePath: "/tmp/image.jpg" }}
       style={{ width: 400, height: 400 }}
     />
-  )
+  );
 }
 ```
 
@@ -68,20 +69,22 @@ target '…' do
 The simplest way to load an Image is to use the exported `loadImage(…)` method:
 
 ```ts
-const webImage      = await loadImage({ url: 'https://picsum.photos/seed/123/400' })
-const fileImage     = await loadImage({ filePath: 'file://my-image.jpg' })
-const resourceImage = await loadImage({ resource: 'my-image.jpg' })
-const symbolImage   = await loadImage({ symbol: 'star' })
-const requireImage  = await loadImage(require('./my-image.jpg'))
+const webImage = await loadImage({ url: "https://picsum.photos/seed/123/400" });
+const fileImage = await loadImage({ filePath: "file://my-image.jpg" });
+const resourceImage = await loadImage({ resource: "my-image.jpg" });
+const symbolImage = await loadImage({ symbol: "star" });
+const requireImage = await loadImage(require("./my-image.jpg"));
 ```
 
 Under the hood, this uses the native methods from `Images` or `WebImages`:
 
 ```ts
-const webImage      = await WebImages.loadFromURLAsync('https://picsum.photos/seed/123/400')
-const fileImage     = await Images.loadFromFileAsync('file://my-image.jpg')
-const resourceImage = Images.loadFromResources('my-resource.jpg')
-const symbolImage   = Images.loadFromSymbol('star')
+const webImage = await WebImages.loadFromURLAsync(
+  "https://picsum.photos/seed/123/400",
+);
+const fileImage = await Images.loadFromFileAsync("file://my-image.jpg");
+const resourceImage = Images.loadFromResources("my-resource.jpg");
+const symbolImage = Images.loadFromSymbol("star");
 ```
 
 #### Creating a blank Image
@@ -89,16 +92,17 @@ const symbolImage   = Images.loadFromSymbol('star')
 Additionally, you can also create a new blank Image:
 
 ```ts
-const blank = Images.createBlankImage(100, 100, /*enableAlpha:*/ true)
+const blank = Images.createBlankImage(100, 100, /*enableAlpha:*/ true);
 ```
 
 If you want to fill the blank image with a specific background color, pass the color in RGB:
 
 ```ts
-const blankRedImage = Images.createBlankImage(100,
-                                              100,
-                                              /*enableAlpha:*/ true,
-                                              { r: 1, g: 0, b: 0 })
+const blankRedImage = Images.createBlankImage(100, 100, /*enableAlpha:*/ true, {
+  r: 1,
+  g: 0,
+  b: 0,
+});
 ```
 
 #### Load with Options
@@ -106,8 +110,8 @@ const blankRedImage = Images.createBlankImage(100,
 When loading from a remote URL, you can tweak options such as `priority`:
 
 ```ts
-const image1 = await WebImages.loadFromURLAsync(URL1, { priority: 'low' })
-const image2 = await WebImages.loadFromURLAsync(URL2, { priority: 'high' })
+const image1 = await WebImages.loadFromURLAsync(URL1, { priority: "low" });
+const image2 = await WebImages.loadFromURLAsync(URL2, { priority: "high" });
 ```
 
 #### Preloading
@@ -115,7 +119,7 @@ const image2 = await WebImages.loadFromURLAsync(URL2, { priority: 'high' })
 If you know what Images are going to be rendered soon, you can pre-load them using the `preload(...)` API:
 
 ```ts
-WebImages.preload(profilePictureLargeUrl)
+WebImages.preload(profilePictureLargeUrl);
 ```
 
 #### `require(…)`
@@ -124,7 +128,7 @@ A React Native `require(…)` returns a resource-ID. In debug, resources are str
 NitroImage wraps those APIs so you can just pass a `require(…)` to `useImage(…)`, `useImageLoader(…)`, or `<NitroImage />` directly:
 
 ```ts
-const image = useImage(require('./image.png'))
+const image = useImage(require("./image.png"));
 ```
 
 #### `RawPixelData` (`ArrayBuffer`)
@@ -152,8 +156,10 @@ const sameImageCopied = await Images.loadFromEncodedImageData(imageData)
 An `Image` can be resized entirely in-memory, without ever writing to- or reading from- a file:
 
 ```ts
-const webImage = await WebImages.loadFromURLAsync('https://picsum.photos/seed/123/400')
-const smaller  = await webImage.resizeAsync(200, 200)
+const webImage = await WebImages.loadFromURLAsync(
+  "https://picsum.photos/seed/123/400",
+);
+const smaller = await webImage.resizeAsync(200, 200);
 ```
 
 #### Cropping
@@ -161,8 +167,10 @@ const smaller  = await webImage.resizeAsync(200, 200)
 An `Image` can be cropped entirely in-memory, without ever writing to- or reading from- a file:
 
 ```ts
-const webImage = await WebImages.loadFromURLAsync('https://picsum.photos/seed/123/400')
-const smaller  = await webImage.cropAsync(100, 100, 50, 50)
+const webImage = await WebImages.loadFromURLAsync(
+  "https://picsum.photos/seed/123/400",
+);
+const smaller = await webImage.cropAsync(100, 100, 50, 50);
 ```
 
 #### Rotating
@@ -170,8 +178,10 @@ const smaller  = await webImage.cropAsync(100, 100, 50, 50)
 An `Image` can be rotated entirely in-memory, without ever writing to- or reading from- a file:
 
 ```ts
-const webImage   = await WebImages.loadFromURLAsync('https://picsum.photos/seed/123/400')
-const upsideDown = await webImage.rotateAsync(180)
+const webImage = await WebImages.loadFromURLAsync(
+  "https://picsum.photos/seed/123/400",
+);
+const upsideDown = await webImage.rotateAsync(180);
 ```
 
 #### Render into another Image
@@ -208,7 +218,7 @@ const compressed = await image.toEncodedImageData('jpg', 50)       // 50% compre
 NitroImage supports `HEIC`/`HEIF` format if the host OS natively supports it.
 
 |              | iOS            | Android        |
-|--------------|----------------|----------------|
+| ------------ | -------------- | -------------- |
 | Loading HEIC | ✅             | ✅ (>= SDK 28) |
 | Writing HEIC | ✅ (>= iOS 17) | ❌             |
 
@@ -241,13 +251,8 @@ The `useImageLoader()` hook creates an asynchronous `ImageLoader` which can be p
 
 ```tsx
 function App() {
-  const loader = useImageLoader({ filePath: '/tmp/image.jpg' })
-  return (
-    <NitroImage
-      image={loader}
-      style={{ width: 400, height: 400 }}
-    />
-  )
+  const loader = useImageLoader({ filePath: "/tmp/image.jpg" });
+  return <NitroImage image={loader} style={{ width: 400, height: 400 }} />;
 }
 ```
 
@@ -259,10 +264,10 @@ The `<NitroImage />` view is a React Native view that allows you to render `Imag
 function App() {
   return (
     <NitroImage
-      image={{ filePath: '/tmp/image.jpg' }}
+      image={{ filePath: "/tmp/image.jpg" }}
       style={{ width: 400, height: 400 }}
     />
-  )
+  );
 }
 ```
 
@@ -288,14 +293,11 @@ To achieve a dynamic width or height calculation, you can use the `image`'s dime
 
 ```tsx
 function App() {
-  const { image, error } = useImage({ filePath: '/tmp/image.jpg' })
-  const aspect = (image?.width ?? 1) / (image?.height ?? 1)
+  const { image, error } = useImage({ filePath: "/tmp/image.jpg" });
+  const aspect = (image?.width ?? 1) / (image?.height ?? 1);
   return (
-    <NitroImage
-      image={image}
-      style={{ width: '100%', aspectRatio: aspect }}
-    />
-  )
+    <NitroImage image={image} style={{ width: "100%", aspectRatio: aspect }} />
+  );
 }
 ```
 
@@ -311,14 +313,14 @@ Since it is a very small buffer (or base64 string), it can be added to a payload
 <details>
   <summary>Usage Example</summary>
 
+For example, your `users` database could have a `users.profile_picture_url` field which you use to asynchronously load the web Image, and a `users.profile_picture_thumbhash` field which contains the ThumbHash buffer (or base64 string) which you can display on-device immediately.
 
-  For example, your `users` database could have a `users.profile_picture_url` field which you use to asynchronously load the web Image, and a `users.profile_picture_thumbhash` field which contains the ThumbHash buffer (or base64 string) which you can display on-device immediately.
+- `users`
+  - `users.profile_picture_url`: Load asynchronously
+  - `users.profile_picture_thumbhash`: Decode & Display immediately
 
-  - `users`
-    - `users.profile_picture_url`: Load asynchronously
-    - `users.profile_picture_thumbhash`: Decode & Display immediately
+Everytime you upload a new profile picture for the user, you should encode the image to a new ThumbHash again and update the `users.profile_picture_thumbhash` field. This should ideally happen on your backend, but can also be performed on-device if needed.
 
-  Everytime you upload a new profile picture for the user, you should encode the image to a new ThumbHash again and update the `users.profile_picture_thumbhash` field. This should ideally happen on your backend, but can also be performed on-device if needed.
 </details>
 
 #### ThumbHash (`ArrayBuffer`) <> Image
@@ -353,25 +355,56 @@ const image          = await Images.loadFromThumbHashAsync(thumbHash)
 const thumbHashAgain = await image.toThumbHash()
 ```
 
+### BlurHash
+
+A [BlurHash](https://github.com/woltapp/blurhash) is a compact string representation of a blurry placeholder image.
+Similar to ThumbHash, it can be stored in your database and displayed immediately while the actual image loads.
+
+#### BlurHash String <> Image
+
+NitroImage supports conversion from [BlurHash](https://github.com/woltapp/blurhash) strings out of the box.
+
+```ts
+const blurHash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj"; // from server
+const image = Images.loadFromBlurHash(blurHash, 32, 32);
+```
+
+The optional `width` and `height` parameters control the size of the decoded image (default: 32x32). Small sizes like 32x32 are recommended for placeholders.
+
+You can also adjust the contrast with the `punch` parameter (default: 1, higher = more contrast):
+
+```ts
+const image = Images.loadFromBlurHash(blurHash, 32, 32, 1.5); // 1.5x contrast
+```
+
+##### Async BlurHash
+
+Since BlurHash decoding can take some time, you should consider using the async method:
+
+```ts
+const blurHash = "LEHV6nWB2yk8pyo0adR*.7kCMdnj";
+const image = await Images.loadFromBlurHashAsync(blurHash, 32, 32);
+```
+
 ## Using the native `Image` type in a third-party library
 
 To use the native `Image` type in your library (e.g. in a Camera library), you need to follow these steps:
 
 1. Add the dependency on `react-native-nitro-image`
-    - JS: Add `react-native-nitro-image` to `peerDependencies` and `devDependencies`
-    - Android: Add `:react-native-nitro-image` to your `build.gradle`'s `dependencies`, and `react-native-nitro-image::NitroImage` to your CMake's dependencies (it's a prefab)
-    - iOS: Add `NitroImage` to your `*.podspec`'s dependencies
+   - JS: Add `react-native-nitro-image` to `peerDependencies` and `devDependencies`
+   - Android: Add `:react-native-nitro-image` to your `build.gradle`'s `dependencies`, and `react-native-nitro-image::NitroImage` to your CMake's dependencies (it's a prefab)
+   - iOS: Add `NitroImage` to your `*.podspec`'s dependencies
 2. In your Nitro specs (`*.nitro.ts`), just import `Image` from `'react-native-nitro-image'` and use it as a type
 3. In your native implementation, you can either;
-    - Implement `HybridImageSpec`, `HybridImageLoaderSpec` or `HybridImageViewSpec` with your custom implementation, e.g. to create a `Image` implementation that doesn't use `UIImage` but instead uses `CGImage`, or an `AVPhoto`
-    - Use the `HybridImageSpec`, `HybridImageLoaderSpec` or `HybridImageViewSpec` types. You can either use them abstract (with all the methods that are also exposed to JS), or by downcasting them to a specific type - all of them follow a protocol like `NativeImage`:
-      ```swift
-      class HybridCustom: HybridCustomSpec {
-        func doSomething(image: any HybridImageSpec) throws {
-          guard let image = image as? NativeImage else { return }
-          let uiImage = image.uiImage
-          // ...
-        }
-      }
-      ```
+   - Implement `HybridImageSpec`, `HybridImageLoaderSpec` or `HybridImageViewSpec` with your custom implementation, e.g. to create a `Image` implementation that doesn't use `UIImage` but instead uses `CGImage`, or an `AVPhoto`
+   - Use the `HybridImageSpec`, `HybridImageLoaderSpec` or `HybridImageViewSpec` types. You can either use them abstract (with all the methods that are also exposed to JS), or by downcasting them to a specific type - all of them follow a protocol like `NativeImage`:
+     ```swift
+     class HybridCustom: HybridCustomSpec {
+       func doSomething(image: any HybridImageSpec) throws {
+         guard let image = image as? NativeImage else { return }
+         let uiImage = image.uiImage
+         // ...
+       }
+     }
+     ```
 4. Done! 🎉 Now you can benefit from a common, shared `Image` type - e.g. your Camera library can directly return an `Image` instance in `takePhoto()`, which can be instantly rendered using `<NitroImage />` - no more file I/O!

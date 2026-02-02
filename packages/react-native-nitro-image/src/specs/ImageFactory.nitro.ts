@@ -127,4 +127,33 @@ export interface ImageFactory
      */
     loadFromThumbHash(thumbhash: ArrayBuffer): Image;
     loadFromThumbHashAsync(thumbhash: ArrayBuffer): Promise<Image>;
+
+    /**
+     * Synchronously decodes the given {@linkcode blurhash} string into an {@linkcode Image}.
+     * @param blurhash The BlurHash string to decode (e.g., "LEHV6nWB2yk8pyo0adR*.7kCMdnj")
+     * @param width The width of the resulting image (default: 32)
+     * @param height The height of the resulting image (default: 32)
+     * @param punch Contrast adjustment factor (default: 1). Values >1 increase contrast.
+     * @throws If the given {@linkcode blurhash} is not a valid BlurHash string.
+     */
+    loadFromBlurHash(
+        blurhash: string,
+        width?: number,
+        height?: number,
+        punch?: number,
+    ): Image;
+    /**
+     * Asynchronously decodes the given {@linkcode blurhash} string into an {@linkcode Image}.
+     * @param blurhash The BlurHash string to decode (e.g., "LEHV6nWB2yk8pyo0adR*.7kCMdnj")
+     * @param width The width of the resulting image (default: 32)
+     * @param height The height of the resulting image (default: 32)
+     * @param punch Contrast adjustment factor (default: 1). Values >1 increase contrast.
+     * @throws If the given {@linkcode blurhash} is not a valid BlurHash string.
+     */
+    loadFromBlurHashAsync(
+        blurhash: string,
+        width?: number,
+        height?: number,
+        punch?: number,
+    ): Promise<Image>;
 }

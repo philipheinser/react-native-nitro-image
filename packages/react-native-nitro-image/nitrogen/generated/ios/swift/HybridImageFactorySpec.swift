@@ -27,6 +27,8 @@ public protocol HybridImageFactorySpec_protocol: HybridObject {
   func loadFromEncodedImageDataAsync(data: EncodedImageData) throws -> Promise<(any HybridImageSpec)>
   func loadFromThumbHash(thumbhash: ArrayBuffer) throws -> (any HybridImageSpec)
   func loadFromThumbHashAsync(thumbhash: ArrayBuffer) throws -> Promise<(any HybridImageSpec)>
+  func loadFromBlurHash(blurhash: String, width: Double?, height: Double?, punch: Double?) throws -> (any HybridImageSpec)
+  func loadFromBlurHashAsync(blurhash: String, width: Double?, height: Double?, punch: Double?) throws -> Promise<(any HybridImageSpec)>
 }
 
 public extension HybridImageFactorySpec_protocol {

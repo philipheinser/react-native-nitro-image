@@ -76,6 +76,8 @@ namespace margelo::nitro::image {
       virtual std::shared_ptr<Promise<std::shared_ptr<HybridImageSpec>>> loadFromEncodedImageDataAsync(const EncodedImageData& data) = 0;
       virtual std::shared_ptr<HybridImageSpec> loadFromThumbHash(const std::shared_ptr<ArrayBuffer>& thumbhash) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<HybridImageSpec>>> loadFromThumbHashAsync(const std::shared_ptr<ArrayBuffer>& thumbhash) = 0;
+      virtual std::shared_ptr<HybridImageSpec> loadFromBlurHash(const std::string& blurhash, std::optional<double> width, std::optional<double> height, std::optional<double> punch) = 0;
+      virtual std::shared_ptr<Promise<std::shared_ptr<HybridImageSpec>>> loadFromBlurHashAsync(const std::string& blurhash, std::optional<double> width, std::optional<double> height, std::optional<double> punch) = 0;
 
     protected:
       // Hybrid Setup

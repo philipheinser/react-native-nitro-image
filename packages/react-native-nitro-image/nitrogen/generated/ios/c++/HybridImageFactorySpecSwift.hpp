@@ -194,6 +194,22 @@ namespace margelo::nitro::image {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::shared_ptr<HybridImageSpec> loadFromBlurHash(const std::string& blurhash, std::optional<double> width, std::optional<double> height, std::optional<double> punch) override {
+      auto __result = _swiftPart.loadFromBlurHash(blurhash, width, height, punch);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<std::shared_ptr<HybridImageSpec>>> loadFromBlurHashAsync(const std::string& blurhash, std::optional<double> width, std::optional<double> height, std::optional<double> punch) override {
+      auto __result = _swiftPart.loadFromBlurHashAsync(blurhash, width, height, punch);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
 
   private:
     NitroImage::HybridImageFactorySpec_cxx _swiftPart;

@@ -134,4 +134,22 @@ class HybridImageFactory: HybridImageFactorySpec {
       return HybridImage(uiImage: uiImage)
     }
   }
+
+  func loadFromBlurHash(blurhash: String, width: Double?, height: Double?, punch: Double?) throws -> any HybridImageSpec {
+    let w = Int(width ?? 32)
+    let h = Int(height ?? 32)
+    let p = Float(punch ?? 1.0)
+    let uiImage = blurHashToImage(blurHash: blurhash, width: w, height: h, punch: p)
+    return HybridImage(uiImage: uiImage)
+  }
+
+  func loadFromBlurHashAsync(blurhash: String, width: Double?, height: Double?, punch: Double?) throws -> Promise<any HybridImageSpec> {
+    return Promise.async {
+      let w = Int(width ?? 32)
+      let h = Int(height ?? 32)
+      let p = Float(punch ?? 1.0)
+      let uiImage = blurHashToImage(blurHash: blurhash, width: w, height: h, punch: p)
+      return HybridImage(uiImage: uiImage)
+    }
+  }
 }

@@ -8,6 +8,7 @@ import androidx.annotation.Keep
 import androidx.core.graphics.createBitmap
 import com.facebook.common.internal.DoNotStrip
 import com.madebyevan.thumbhash.ThumbHash
+import com.wolt.blurhashkt.BlurHashDecoder
 import com.margelo.nitro.NitroModules
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
@@ -119,5 +120,25 @@ class HybridImageFactory: HybridImageFactorySpec() {
         // We need to copy before jumping Threads
         val bytes = thumbhash.toByteArray()
         return Promise.async { loadFromThumbHash(bytes) }
+    }
+
+    private fun loadFromBlurHashInternal(blurhash: String, width: Int, height: Int, punch: Float): HybridImage {
+        val bitmap = BlurHashDecoder.decode(blurhash, width, height, punch)
+            ?: throw Error("Failed to decode BlurHash: $blurhash")
+        return HybridImage(bitmap)
+    }
+
+    override fun loadFromBlurHash(blurhash: String, width: Double?, height: Double?, punch: Double?): HybridImageSpec {
+        val w = width?.toInt() ?: 32
+        val h = height?.toInt() ?: 32
+        val p = punch?.toFloat() ?: 1.0f
+        return loadFromBlurHashInternal(blurhash, w, h, p)
+    }
+
+    override fun loadFromBlurHashAsync(blurhash: String, width: Double?, height: Double?, punch: Double?): Promise<HybridImageSpec> {
+        val w = width?.toInt() ?: 32
+        val h = height?.toInt() ?: 32
+        val p = punch?.toFloat() ?: 1.0f
+        return Promise.async { loadFromBlurHashInternal(blurhash, w, h, p) }
     }
 }
